@@ -12,11 +12,21 @@ require('dotenv').config()
 
 function getKp(uid)
 {
+    var row = Math.ceil(uid/process.env.WLLET_HD_MAX)
+    var subRow = Math.ceil(uid%process.env.WLLET_HD_MAX)
     var kp = nacl.sign.keyPair.fromSecretKey(
         b58.decode(process.env.WLLET_SK)
     )
     const master = hd.hdkey.fromMasterSeed(kp.publicKey);
-    var evm = master.deriveChild(uid)
+    const subKp = nacl.sign.keyPair.fromSeed(
+        (
+            (
+                master.deriveChild(row)
+            ).getWallet()
+        ).getPrivateKey()
+    );
+    const subMaster = hd.hdkey.fromMasterSeed(subKp.publicKey);
+    var evm = subMaster.deriveChild(subRow)
     var evmWallet = evm.getWallet()
     var evmKp = {
         address : evmWallet.getAddressString(),
@@ -37,8 +47,19 @@ function getKp(uid)
 
 }
 
+function getAddress(uid)
+{
+    const kp = getKp(uid);
+    return{
+        evm : kp.evmKp.address,
+        sol : kp.solKp.address,
+        ton : kp.tonKp.address.toString(true,false,false)
+    }
+}
+
 module.exports = {
     getKp,
+    getAddress,
     ton,
     evm,
     sol

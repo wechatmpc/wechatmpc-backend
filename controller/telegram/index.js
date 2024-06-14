@@ -2,12 +2,10 @@ const TelegramBot = require('node-telegram-bot-api');
 require('dotenv').config()
 const token = process.env.TELEGRAMAPI;
 const tool = require("../../utils/tools")
-const tonList = require("./src/tonList")
 const bot = new TelegramBot(token, { polling: true });
 
 const src = require("./src/index")
 
-src.connector.init(bot)
 bot.on('message', async(msg) => {
     try {
         if (msg["reply_to_message"]) {
@@ -57,7 +55,6 @@ async function router(data) {
             req.params = [
                 data.text
             ]
-            await tonList.search(bot, uid, req, data);
             break;
     }
 }

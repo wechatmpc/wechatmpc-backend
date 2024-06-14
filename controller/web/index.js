@@ -47,12 +47,31 @@ app.get('/ping', auth.auth, async function(req, res) {
 
 
 
-app.post('/connect', auth.auth, async function(req, res) {
-    const verfi = modules.wallet.metamask.newMetamaskConnection(res.locals.auth, req.body['sign']);
-    res.status(200).send({
-        "code": 200,
-        "data": verfi
-    })
+app.post('/connect', async function(req, res) {
+    try{
+        const verfi = tgVerfiy(process.env.TELEGRAMAPI, req.body.initData)
+        console.log(verfi)
+        if (verfi) {
+            const rawData = querystring.decode(req.body.initData);
+            const userData = JSON.parse(rawData.user)
+            const token = await auth.newkey(userData.id)
+            console.log(token)
+            console.log(userData.id)
+            const wallets = modules.wallet.getAddress(userData.id)
+            res.status(200).send({
+                "code": 200,
+                "token": token,
+                "data": {
+                    wallets : wallets,
+                    userData : userData
+                }
+            })
+        } else {
+            await sendErr(res)
+        }
+    }catch(e)
+    {console.error(e);await sendErr(res)}
+
 })
 
 /**
@@ -61,8 +80,8 @@ app.post('/connect', auth.auth, async function(req, res) {
 
 app.post('/auth', async function(req, res) {
     const verfi = tgVerfiy(process.env.TELEGRAMAPI, req.body.initData)
+    console.log(verfi)
     if (verfi) {
-        // console.log(req.body.initData)
         const rawData = querystring.decode(req.body.initData);
         const userData = JSON.parse(rawData.user)
         const token = await auth.newkey(userData.id)
@@ -99,7 +118,7 @@ function tgVerfiy(apiToken, telegramInitData) {
 
 //INIT
 async function init() {
-
+    await redis.init()
 }
 
 module.exports = {

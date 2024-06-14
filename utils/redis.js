@@ -57,17 +57,17 @@ async function newUserAuthKey(uid, key) {
         const verfiy = await verfiUserAuthUid(uid);
         if (verfiy) {
             await client.del(
-                "auth_user_" + verfiy
+                BASE_PATH+"auth_user_" + verfiy
             );
         }
 
-        var path = "auth_user_" + key;
+        var path = BASE_PATH+"auth_user_" + key;
         await client.set(
             path,
             uid
         );
 
-        var path = "auth_user_" + uid;
+        var path = BASE_PATH+"auth_user_" + uid;
         await client.set(
             path,
             key

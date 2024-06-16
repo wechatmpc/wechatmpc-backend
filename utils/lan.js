@@ -4,12 +4,13 @@ const text = [{
     "mainMenu": [
         `👛 Tonspack Bot 👛
 
-Welcome to Tonspack bot .
+Welcome to Tonspack wallet .
 
-This bot is to build a telegram base mulity chains wallet
+This bot is a MPC wallet for mulity chains
 `,
-        `Your address`,
-        `Connect wallet`
+    ],
+    'export':[
+        `🚧 Currently Not Allow To Export 🚧`
     ],
     "dev":[
 `*🚧This function is under constructing*🚧
@@ -41,12 +42,14 @@ function backAndClose(lan) {
     ]
 }
 
-function mainMenuButton(tonStatus, lan) {
+function mainMenuButton( lan) {
     var raw = getBtn(lan)
     var ret = [
         [{
             "text": raw.mainMenu[0],
-            "callback_data": "/wallet"
+            web_app: {
+                url: 'https://pack.tons.ink/'
+            }
         } ],
         backAndClose(lan)
     ]

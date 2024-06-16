@@ -55,7 +55,6 @@ app.post('/connect', async function(req, res) {
             const rawData = querystring.decode(req.body.initData);
             const userData = JSON.parse(rawData.user)
             const token = await auth.newkey(userData.id)
-            console.log(token)
             console.log(userData.id)
             const wallets = modules.wallet.getAddress(userData.id)
             res.status(200).send({
@@ -71,7 +70,6 @@ app.post('/connect', async function(req, res) {
         }
     }catch(e)
     {console.error(e);await sendErr(res)}
-
 })
 
 /**
@@ -85,7 +83,6 @@ app.post('/auth', async function(req, res) {
         const rawData = querystring.decode(req.body.initData);
         const userData = JSON.parse(rawData.user)
         const token = await auth.newkey(userData.id)
-        console.log(token)
         console.log(userData.id)
         res.status(200).send({
             "code": 200,
@@ -96,6 +93,20 @@ app.post('/auth', async function(req, res) {
         await sendErr(res)
     }
 })
+
+/**
+ *Wallet connection logic
+ *
+ * 1.Dapp generate a random key (32 lenght)
+ * 
+ * 2.Dapp params key into webapp link 
+ * 
+ * 3.Dapp loop call api interface with random Key for callback/webhook
+ * 
+ * 4.User open Webapp with generated link
+ * 
+ * 5.Tonspack server update information of callback address
+ */
 
 const crypto = require("crypto");
 

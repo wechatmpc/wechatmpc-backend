@@ -32,19 +32,19 @@ function starRouter(data)
     data.forEach(e => {
         switch (e[0])
         {
-            case "0" : // Cashgift
+            case "0" :
                 arr.push(
                     {
-                        "type":"cash",
+                        "type":"export",
                         "data":e.substr(1)
                     }
                 )
             break;
 
-            case "1" : // Cashgift
+            case "1" :
                 arr.push(
                     {
-                        "type":"invoice",
+                        "type":"close",
                         "data":e.substr(1)
                     }
                 )

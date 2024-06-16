@@ -42,6 +42,13 @@ async function router(data) {
         case "start":
             await src.menu.star(bot, uid, req, data);
             var s = tool.starRouter(req.params)
+            if(s&&s.length>0)
+            {
+                if(s[0].type=='export')
+                {
+                    return src.menu.exportSeed(bot, uid, req, data)
+                }
+            }
             return src.menu.menu(bot, uid, req, data)
             break;
         case "menu":

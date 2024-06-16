@@ -5,12 +5,6 @@ const lan = require("../../../utils/lan")
 
 async function star(bot, uid, req, raw) {
     await db.newAccount(raw.from);
-    await db.newMerchant(uid, {
-        uid: uid.toString(),
-        name: null,
-        type: 0,
-        createTime: Date.now(),
-    })
     return true;
 }
 
@@ -21,10 +15,23 @@ async function menu(bot, uid, req, raw) {
         parse_mode: 'MarkDown',
         disable_web_page_preview: "true",
         reply_markup: JSON.stringify({
-            inline_keyboard: lan.mainMenuButton(tonStatus)
+            inline_keyboard: lan.mainMenuButton()
         })
     });
 }
+
+async function exportSeed(bot, uid, req, raw) {
+    var text = lan.getText()
+    var finalText = text['export'][0];
+    return await tg.tryBotSendMessage(bot, uid, finalText, {
+        parse_mode: 'MarkDown',
+        disable_web_page_preview: "true",
+        reply_markup: JSON.stringify({
+            inline_keyboard: [lan.backAndClose()]
+        })
+    });
+}
+
 
 async function debug(bot, uid, req, raw) {
     return await tg.tryBotSendMessage(bot, uid, "test", {
@@ -70,5 +77,6 @@ module.exports = {
     star,
     menu,
     debug,
-    dev
+    dev,
+    exportSeed
 }

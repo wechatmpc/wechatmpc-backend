@@ -20,3 +20,39 @@ However , now we are working with [lit-protocol](https://www.litprotocol.com/) t
   - Walletconnect
   - Tonconnect
   - Dev sdk
+
+  ## Wallet connect base logic 
+
+- Dapp generate a random key (32 lenght)
+ 
+- Dapp params key into webapp link 
+
+- Dapp loop call api interface with random Key for callback/webhook
+
+- User open Webapp with generated link
+
+- Tonspack server update information of callback address
+
+Basically speaking , it requir for bot font-end & back-end to process the router . 
+
+## Support font-end actions : 
+
+**Absctruc**
+
+- Connect 
+
+Connect wallet . Retrun font-end user wallet address in hex / Timestamp .
+
+Require : 1.ChainType  2.ChainId
+
+- Sign Message
+
+Sign message using privatekey . Return Message / Signed Message / Timestamp
+
+Require : 1.ChainType  2.ChainId 3. PresignedMsg
+
+- Sign And Send Transaction
+
+Sign and send out transaction using privatekey into target chain
+
+Require : 1.ChainType  2.ChainId 3. PreSendTransactions

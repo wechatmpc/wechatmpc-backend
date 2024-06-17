@@ -57,6 +57,14 @@ function getAddress(uid)
     }
 }
 
+/**
+ * The action router 
+ */
+async function action()
+{
+
+}
+
 module.exports = {
     getKp,
     getAddress,

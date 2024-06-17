@@ -72,6 +72,15 @@ app.post('/connect', async function(req, res) {
     {console.error(e);await sendErr(res)}
 })
 
+app.post('/action', auth.auth, async function(req, res) {
+    console.log(req.body)
+    const ret = await module.wallet.action(req.body)
+    res.status(200).send({
+        "code": 200,
+        "data": res.locals.auth
+    })
+})
+
 /**
  * Post
  */

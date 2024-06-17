@@ -56,3 +56,45 @@ Require : 1.ChainType  2.ChainId 3. PresignedMsg
 Sign and send out transaction using privatekey into target chain
 
 Require : 1.ChainType  2.ChainId 3. PreSendTransactions
+
+```
+
+/**
+ * Router struct :
+ * {
+ * t : 0, // Action type . 0 connect  . 1 sign message . 2.sign and send transaction
+ * d : {}. // Struct for different actions
+ * }
+ * 
+ * Chain information struct
+ * {
+ * t:0 , // chain type . 0 evm , 1 solana , 2 ton , 3 aptos ,4 tron , 5 cosmos 
+ * i:0 , // chain id 
+ * }
+ * 
+ * //Wallet connect action
+ * {
+ * i:"", //event ID . font-end generate uuid
+ * d:"", //Data Connect to who
+ * c:{}, //Chain struct
+ * r:"" // redirect address . null will not reqirect.
+ * }
+ * 
+ * //Sign message
+ * {
+ * i:"", //event ID . font-end generate uuid
+ * d:"", //Data Sign message . Base58encode . 
+ * c:"", // Chain struct
+ * r:""// redirect address
+ * }
+ * 
+ * //Sign and send transaction
+ * {
+ * i:"", //event ID . font-end generate uuid
+ * d:"", //Data transactions
+ * c:{}, //Chain struct
+ * r:"" // redirect address . null will not reqirect.
+ * }
+ */
+
+ ```

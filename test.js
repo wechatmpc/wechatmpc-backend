@@ -37,7 +37,8 @@ function seedToKp()
     )
 }
 
-async function test() {
+function seedTest()
+{
     var kp = nacl.sign.keyPair.fromSecretKey(
         b58.decode(process.env.WLLET_SK)
     )
@@ -49,6 +50,39 @@ async function test() {
         b58.encode(nacl.sign.keyPair.fromSeed(child_wallet.getPrivateKey()).publicKey),
         b58.encode(nacl.sign.keyPair.fromSeed(child_wallet.getPrivateKey()).secretKey)
     )
+}
+
+function b58Test()
+{
+    var d =  {
+        t:1,
+        i:"1234567",
+        d:"Hello qwq",
+        c:{
+            t:0,
+            i:1
+        },
+        r:""
+        }
+
+    var c =  {
+        t:0,
+        i:"1234567",
+        d:"wallet.tonspay.top",
+        c:{
+            t:1,
+            i:1
+        },
+        r:""
+        }
+    console.log(
+        b58.encode(
+            Buffer.from(JSON.stringify(c))
+        )
+    )
+}
+async function test() {
+    b58Test()
 }
 
 test()

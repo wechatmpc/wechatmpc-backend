@@ -5,6 +5,7 @@
     "@tonconnect/sdk": "^3.0.0-beta.3",
     "@tonlink/api": "^0.0.4",
     "b58": "^4.0.3",
+    "base58": "^2.0.1",
     "buffer-to-uint8array": "^1.1.0",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",

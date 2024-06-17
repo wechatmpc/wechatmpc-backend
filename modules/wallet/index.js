@@ -107,7 +107,7 @@ async function connect(uid,data)
     return c;
 }
 
-async function sign(data)
+async function sign(uid,data)
 {
     var c = false;
     if(data.i && data.d)

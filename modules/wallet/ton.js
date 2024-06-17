@@ -16,7 +16,11 @@ function connect(kp)
 function sign(kp,data)
 {
     const messageBytes = Buffer.from(data);
-    return nacl.sign.detached(messageBytes, kp.solKp.privateKey);
+    return {
+        address:kp.naclKp.address,
+        message:data,
+        sign:b58.encode(nacl.sign(messageBytes, b58.decode(kp.naclKp.privateKey))) 
+    }
 }
 
 async function signAndSendTxn(kp,tx)

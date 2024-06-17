@@ -88,7 +88,7 @@ async function connect(uid,data)
     if(data.i)
     {
         const adds = getAddress(uid)
-        switch(data.c)
+        switch(data.c.t)
         {
             case 0 :
                 c = adds.evm;
@@ -113,7 +113,7 @@ async function sign(data)
     if(data.i && data.d)
     {
         const kps = getKp(uid)
-        switch(data.c)
+        switch(data.c.t)
         {
             case 0 :
                 c = evm.sign(kps,data.d);
@@ -127,7 +127,7 @@ async function sign(data)
             default :
                 return false;
         }
-        await redis.setAction(data.i,c)
+        await redis.setAction(data.i,JSON.stringify(c))
     }
     return c;
 }

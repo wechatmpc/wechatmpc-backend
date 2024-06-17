@@ -124,7 +124,13 @@ async function tonTest()
     console.log(tonKp)
 }
 async function test() {
-    await tonTest()
+    // await tonTest()
+    console.log(
+        JSON.parse(
+            Buffer.from(b58.decode('LJJo8qy8ofHLyXhuPjAehW53jSHLdSaBpvZrgEDj2tqua4Sks7KnncizX83noLPShMMUZ1959j1TkTvW1jbZDjYoJdhjZzPKeR8ckaQvw2g8bH4PB7tSEQHXfdn')).toString()
+        )
+        
+    )
 }
 
 test()

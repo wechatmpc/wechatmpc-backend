@@ -51,7 +51,7 @@ async function getStorage(key) {
  * TODO : auto clean
  */
 async function setAction(id, data) {
-    var path =BASE_PATH+ id.toString() + "_action";
+    var path =BASE_PATH+ id + "_action";
     await client.set(
         path,
         JSON.stringify(data)
@@ -59,7 +59,7 @@ async function setAction(id, data) {
 }
 
 async function getAction(id, types) {
-    var path = BASE_PATH+id.toString() + "_action";
+    var path = BASE_PATH+id + "_action";
     const value = await client.get(path);
     try {
         return JSON.parse(value);

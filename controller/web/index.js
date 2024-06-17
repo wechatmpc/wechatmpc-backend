@@ -18,6 +18,8 @@ const auth = require("./middleware/auth");
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
+const cors = require('cors');
+app.use(cors())
 
 app.listen(50001, async function() {
     console.log('web-server start')
@@ -80,10 +82,11 @@ app.post('/action', auth.auth, async function(req, res) {
     })
 })
 
-app.get('/result/:actionId', auth.auth, async function(req, res) {
+app.get('/result/:actionId',async function(req, res) {
+    const ret = await redis.getAction(req.params.actionId)
     res.status(200).send({
         "code": 200,
-        "data": res.locals.auth
+        "data": ret
     })
 })
 /**

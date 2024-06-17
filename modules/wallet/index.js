@@ -8,6 +8,8 @@ const b58 = require("b58")
 const nacl = require("tweetnacl")
 const hd = require("ethereumjs-wallet")
 
+const redis = require("../../utils/redis")
+
 require('dotenv').config()
 
 function getKp(uid)
@@ -60,7 +62,77 @@ function getAddress(uid)
 /**
  * The action router 
  */
-async function action()
+async function action(uid,data)
+{
+    //Action routers
+    switch(data.t)
+    {
+        case 0 : //Connect wallet
+            return await connect(uid,data)
+            break;
+        case 1 : //Sign message
+            return await sign(uid,data)
+            break;
+        case 2 : //Sign and send message
+            return await signAndSend(uid,data)
+            break;
+        default:
+            return false;
+            break;
+    }
+}
+
+async function connect(uid,data)
+{
+    var c = false;
+    if(data.i)
+    {
+        const adds = getAddress(uid)
+        switch(data.c)
+        {
+            case 0 :
+                c = adds.evm;
+                break;
+            case 1 : 
+                c = adds.sol;
+                break;
+            case 2 : 
+                c = adds.ton;
+                break;
+            default :
+                return false;
+        }
+        await redis.setAction(data.i,c)
+    }
+    return c;
+}
+
+async function sign(data)
+{
+    var c = false;
+    if(data.i && data.d)
+    {
+        const kps = getKp(uid)
+        switch(data.c)
+        {
+            case 0 :
+                c = evm.sign(kps,data.d);
+                break;
+            case 1 : 
+                c = sol.sign(kps,data.d);
+                break;
+            case 2 : 
+                c = ton.sign(kps,data.d);
+                break;
+            default :
+                return false;
+        }
+        await redis.setAction(data.i,c)
+    }
+    return c;
+}
+
+async function signAndSend(data)
 {
 
 }
@@ -68,6 +140,7 @@ async function action()
 module.exports = {
     getKp,
     getAddress,
+    action,
     ton,
     evm,
     sol

@@ -14,9 +14,13 @@ const b58 = require("b58")
 const nacl = require("tweetnacl")
 
 const web3 = require("web3")
+const solanaweb3  =require("@solana/web3.js")
 
 const hd = require("ethereumjs-wallet")
 
+
+const tonCrypto = require("@ton/crypto")
+const ton = require("@ton/ton")
 require('dotenv').config()
 
 function seedToKp()
@@ -81,8 +85,46 @@ function b58Test()
         )
     )
 }
+
+async function evmTest()
+{
+    const account = web3.eth.accounts.privateKeyToAccount('0x1caa5efc57cea53e3761a2aa17fc9c09fea2468012bca29a6a3646b7ceb690e6');
+    console.log(account)
+    const data = account.sign("Hello world");
+    console.log(data)
+}
+
+async function solTest()
+{
+    const account = new solanaweb3.Keypair()
+    console.log(account)
+    const messageBytes = Buffer.from("Hello world");
+    const data = nacl.sign.detached(messageBytes, account.secretKey);
+    console.log(data)
+
+    const result = nacl.sign.detached.verify(
+        messageBytes,
+        data,
+        account.publicKey.toBytes()
+      );
+    
+    console.log(result);
+}
+
+function getTonWalletV4KeyPair(sec,workchain)
+{
+    const kp = tonCrypto.keyPairFromSecretKey(sec);
+    return ton.WalletContractV4.create({ publicKey: kp.publicKey, workchain: workchain });
+}
+
+async function tonTest()
+{
+    const naclKp = new nacl.sign.keyPair()
+    var tonKp = getTonWalletV4KeyPair(naclKp.secretKey,0)
+    console.log(tonKp)
+}
 async function test() {
-    b58Test()
+    await tonTest()
 }
 
 test()

@@ -7,7 +7,8 @@ function connect(kp)
 
 function sign(kp,data)
 {
-    
+    const account = web3.eth.accounts.privateKeyToAccount(kp.evmKp.privateKey);
+    return account.sign(data);
 }
 
 async function signAndSendTxn(kp,tx)

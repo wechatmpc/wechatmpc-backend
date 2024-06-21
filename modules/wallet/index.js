@@ -145,10 +145,10 @@ async function signAndSend(uid,data)
                 c = await evm.signAndSendTxn(kps,data);
                 break;
             case 1 : 
-                c = sol.signAndSendTxn(kps,data);
+                c = await sol.signAndSendTxn(kps,data);
                 break;
             case 2 : 
-                c = ton.signAndSendTxn(kps,data);
+                c = await ton.signAndSendTxn(kps,data);
                 break;
             default :
                 return false;

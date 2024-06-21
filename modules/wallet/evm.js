@@ -28,21 +28,28 @@ async function signAndSendTxn(kp,data)
                     gas,
                     gasPrice,
                     nonce, 
-                    chainId: data.c.i
+                    chainId: data.c.i,
+                    data:""
                 };
                 if(txns.v && txns.v > 0)
                     {
                         transaction['value'] = txns.v
                     }
 
-                if(txns.d && txns.d.lenght > 0)
+                if(txns.d)
                     {
                         transaction['data'] = txns.d
+                        transaction['gas'] = await web3.eth.estimateGas({
+                            value:transaction.value,
+                            to: txns.t,
+                            data: txns.d
+                        })
                     }
                 if(txns.g && txns.g > 0)
                     {
                         transaction.gas = txns.g;
                     }
+                // console.log(transaction)
                 const signedTx = await web3.eth.accounts.signTransaction(transaction, kp.evmKp.privateKey);
                 const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
                 return receipt;

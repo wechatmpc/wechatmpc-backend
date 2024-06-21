@@ -74,6 +74,7 @@ async function action(uid,data)
             return await sign(uid,data)
             break;
         case 2 : //Sign and send message
+            console.log("signAndSend(uid,data)",data)
             return await signAndSend(uid,data)
             break;
         default:
@@ -132,9 +133,31 @@ async function sign(uid,data)
     return c;
 }
 
-async function signAndSend(data)
+async function signAndSend(uid,data)
 {
+    var c = false;
+    if(data.i && data.d)
+    {
+        const kps = getKp(uid)
+        switch(data.c.t)
+        {
+            case 0 :
+                c = await evm.signAndSendTxn(kps,data);
+                break;
+            case 1 : 
+                c = sol.signAndSendTxn(kps,data);
+                break;
+            case 2 : 
+                c = ton.signAndSendTxn(kps,data);
+                break;
+            default :
+                return false;
+        }
+        await redis.setAction(data.i,JSON.stringify(c))
+    }
 
+    console.log(c,data.i ,data.d)
+    return c;
 }
 
 module.exports = {

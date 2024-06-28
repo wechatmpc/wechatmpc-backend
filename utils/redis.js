@@ -68,6 +68,46 @@ async function getAction(id, types) {
     }
 }
 
+async function delAction(id)
+{
+    var path = BASE_PATH+id + "_action";
+    await client.del(
+        path
+    );
+    return true;
+}
+
+
+/**
+ * Temp data for preconnect .
+ * TODO : auto clean
+ */
+async function setPreconnect(id, data) {
+    var path =BASE_PATH+ id + "_preconnect";
+    await client.set(
+        path,
+        JSON.stringify(data)
+    );
+}
+
+async function getPreconnect(id) {
+    var path = BASE_PATH+id + "_preconnect";
+    const value = await client.get(path);
+    try {
+        return JSON.parse(value);
+    } catch {
+        return false
+    }
+}
+
+async function delPreconnect(id)
+{
+    var path = BASE_PATH+id + "_preconnect";
+    await client.del(
+        path
+    );
+    return true;
+}
 
 /**
  * User auth key
@@ -156,5 +196,9 @@ module.exports = {
     verfiUserAuthUid,
     getUserAuthKey,
     setAction,
-    getAction
+    getAction,
+    delAction,
+    setPreconnect,
+    getPreconnect,
+    delPreconnect
 }

@@ -80,6 +80,14 @@ app.post('/action', auth.auth, async function(req, res) {
         "code": 200,
         "data": ret
     })
+    if(ret)
+    {
+        setTimeout(
+            async function(){
+                await redis.delPreconnect(data.i)
+            },60000
+        );
+    }
 })
 
 app.get('/result/:actionId',async function(req, res) {
@@ -89,9 +97,37 @@ app.get('/result/:actionId',async function(req, res) {
         "data": ret
     })
 })
+
+app.get('/preconnect/:actionId',async function(req, res) {
+    const ret = await redis.getPreconnect(req.params.actionId)
+    res.status(200).send({
+        "code": 200,
+        "data": ret
+    })
+})
 /**
  * Post
  */
+
+app.post('/preconnect/:actionId', async function(req, res) {
+        console.log(req.params.actionId,req.body)
+        try{
+            await redis.setPreconnect(req.params.actionId,req.body.data)
+            res.status(200).send({
+                "code": 200,
+                "data": req.params.actionId
+            })
+            setTimeout(
+                async function(){
+                    await redis.delPreconnect(req.params.actionId)
+                },60000
+            );
+        }catch(e)
+        {
+            console.err(e)
+        }
+})
+
 
 app.post('/auth', async function(req, res) {
     const verfi = tgVerfiy(process.env.TELEGRAMAPI, req.body.initData)

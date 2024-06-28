@@ -29,6 +29,13 @@ async function signAndSendTxn(kp,tx)
     
         const realTx =web3.Transaction.populate(web3.Message.from(rawSign))
         const signer = web3.Keypair.fromSecretKey(b58.decode(kp.solKp.privateKey))
+        console.log(signer.publicKey.toString())
+        realTx.sign(signer);
+        realTx.partialSign(signer);
+        var finalSign = realTx.serialize()
+        console.log("final Sign",finalSign)
+        return Buffer.from(finalSign).toString("base64")
+        
         return await web3.sendAndConfirmTransaction(
             conn,
             realTx,

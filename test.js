@@ -123,14 +123,26 @@ async function tonTest()
     var tonKp = getTonWalletV4KeyPair(naclKp.secretKey,0)
     console.log(tonKp)
 }
+
+async function setTimeoutTest()
+{
+    console.log("setTimeoutTest 0")
+}
+
 async function test() {
     // await tonTest()
     console.log(
         JSON.parse(
-            Buffer.from(b58.decode('LJJo8qy8ofHLyXhuPjAehW53jSHLdSaBpvZrgEDj2tqua4Sks7KnncizX83noLPShMMUZ1959j1TkTvW1jbZDjYoJdhjZzPKeR8ckaQvw2g8bH4PB7tSEQHXfdn')).toString()
+            Buffer.from(b58.decode('3PDashQ58rEaLGCGZzevU5j2spW2rtJNzDoPcnP1RS26ajjk52jkqZkup5jPYTb78o4EMjf6SqsHaS3eUcfTTyptsbXpNtfrpr3R7vhbevmWwNpH7inGgdqCzBrhA85XvK7QPGZ5xBPuSNag')).toString()
         )
-        
     )
+    // await setTimeoutTest()
+    // setTimeout(
+    //     async function(){
+    //         console.log('setTimeoutTest 1')
+    //     },2000
+    // );
+    // console.log("setTimeoutTest 2")
 }
 
 test()

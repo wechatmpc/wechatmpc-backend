@@ -133,7 +133,7 @@ async function test() {
     // await tonTest()
     console.log(
         JSON.parse(
-            Buffer.from(b58.decode('3PDashQ58rEaLGCGZzevU5j2spW2rtJNzDoPcnP1RS26ajjk52jkqZkup5jPYTb78o4EMjf6SqsHaS3eUcfTTyptsbXpNtfrpr3R7vhbevmWwNpH7inGgdqCzBrhA85XvK7QPGZ5xBPuSNag')).toString()
+            Buffer.from(b58.decode('2Wzm3Df4WpmRG13y9z1W7savKAGCBnEjdsrSyEC1Wkxu1tzeuSorzZfyQur6QAGTEnpj6')).toString()
         )
     )
     // await setTimeoutTest()

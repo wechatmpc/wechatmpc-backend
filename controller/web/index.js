@@ -84,7 +84,7 @@ app.post('/action', auth.auth, async function(req, res) {
     {
         setTimeout(
             async function(){
-                await redis.delPreconnect(data.i)
+                await redis.delPreconnect(req.body.i)
             },60000
         );
     }
@@ -99,7 +99,20 @@ app.get('/result/:actionId',async function(req, res) {
 })
 
 app.get('/preconnect/:actionId',async function(req, res) {
-    const ret = await redis.getPreconnect(req.params.actionId)
+    var ret = await redis.getPreconnect(req.params.actionId)
+    if(ret)
+        {
+           try{
+            ret = JSON.parse(
+                Buffer.from(
+                    b58.decode(ret)
+                ).toString()
+            )
+           }catch(e)
+           {
+            console.error(e)
+           }
+        }
     res.status(200).send({
         "code": 200,
         "data": ret

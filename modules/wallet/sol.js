@@ -28,6 +28,17 @@ async function signAndSendTxn(kp,tx)
         const rawSign =  new Uint8Array(b58.decode(tx.d))
     
         const realTx =web3.Transaction.populate(web3.Message.from(rawSign))
+
+        // realTx.add(
+        //     web3.ComputeBudgetProgram.setComputeUnitLimit({ 
+        //         units: 1000 
+        //       })
+        //   )
+        // realTx.add(
+        //     web3.ComputeBudgetProgram.setComputeUnitPrice({ 
+        //         microLamports: 20000
+        //       })
+        //   )
         const signer = web3.Keypair.fromSecretKey(b58.decode(kp.solKp.privateKey))
         console.log(signer.publicKey.toString())
         realTx.sign(signer);

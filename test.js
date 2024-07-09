@@ -129,7 +129,19 @@ async function setTimeoutTest()
     console.log("setTimeoutTest 0")
 }
 
+
+async function sol_version_tx_test()
+{
+    var tx = '';
+    const rawSign =  new Uint8Array(b58.decode(tx))
+    // const realTx =solanaweb3.Transaction.populate(solanaweb3.Message.from(rawSign))
+    const realTx = solanaweb3.VersionedTransaction.deserialize(rawSign) //solanaweb3.VersionedMessage.deserialize(rawSign)
+    // const realTx = new solanaweb3.Transaction()
+    console.log(typeof(realTx))
+    console.log(realTx.constructor.name == "VersionedTransaction")
+}
 async function test() {
+    await sol_version_tx_test()
     // await tonTest()
     // await setTimeoutTest()
     // setTimeout(

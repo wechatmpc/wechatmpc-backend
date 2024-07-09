@@ -25,62 +25,90 @@ async function signAndSendTxn(kp,tx)
     try{
         const conn = new web3.Connection(sol_rpc_url);
         var ret = [];
-        const txs = JSON.parse(
-            tx.d
-        )
+        var txs = tx.d 
+        if(typeof(txs) != 'object')
+        {
+            JSON.parse(
+                tx.d
+            )
+        }
         for(var u = 0 ; u<txs.length ; u++)
         {
             const ele = txs[u]
-            const rawSign =  new Uint8Array(b58.decode(ele))
+            const rawSign =  new Uint8Array(b58.decode(ele.d))
     
-            const realTx =web3.Transaction.populate(web3.Message.from(rawSign))
-                
-            let blockhashObj = await conn.getRecentBlockhash();
-            realTx.recentBlockhash = blockhashObj.blockhash;
-    
-            const signer = web3.Keypair.fromSecretKey(b58.decode(kp.solKp.privateKey))
-            console.log(signer.publicKey.toString())
+            var realTx =web3.Transaction.populate(web3.Message.from(rawSign))
 
-            const simulate = await conn.simulateTransaction(realTx,[signer],[signer.publicKey])
-            console.log(
-                "🚧 Do conn.simulateTransaction",
-                simulate,
-                simulate.value.accounts
-            )
-            // if(!simulate.value.logs)
+            const signer = web3.Keypair.fromSecretKey(b58.decode(kp.solKp.privateKey))    
 
-            var addFee = true;
-            simulate.value.logs.forEach(ele => {
-                if(ele == 'Program ComputeBudget111111111111111111111111111111 success')
-                {
-                    addFee = false
-                }
-            });
-            if(addFee)
+            if(ele.t && ele.t == 1)
             {
-                const unitsConsumed = simulate.value.unitsConsumed+300;
-                const unitsPrice = 20000
-                realTx.add(
-                    web3.ComputeBudgetProgram.setComputeUnitLimit({ 
-                        units: unitsConsumed 
-                    })
+                //Version transaction
+                realTx = web3.VersionedTransaction.deserialize(rawSign);
+                console.log("🚧 Transactions to sign :",realTx)
+                realTx.sign([signer])
+                console.log("🚧 Transactions signed :",realTx)
+                var finalSign = realTx.serialize()
+                ret.push(
+                    {
+                        t:1,
+                        d:Buffer.from(finalSign).toString("base64")
+                    }
                 )
-                realTx.add(
-                    web3.ComputeBudgetProgram.setComputeUnitPrice({ 
-                        microLamports: unitsPrice
-                    })
+            }else{
+                //Transaction
+                if(!realTx.recentBlockhash)
+                {
+                    let blockhashObj = await conn.getRecentBlockhash();
+                    realTx.recentBlockhash = blockhashObj.blockhash;
+                }
+    
+                const simulate = await conn.simulateTransaction(realTx,[signer],[signer.publicKey])
+                console.log(
+                    "🚧 Do conn.simulateTransaction",
+                    simulate,
+                    simulate.value.accounts
+                )
+                // if(!simulate.value.logs)
+    
+                var addFee = true;
+                simulate.value.logs.forEach(ele => {
+                    if(ele == 'Program ComputeBudget111111111111111111111111111111 success')
+                    {
+                        addFee = false
+                    }
+                });
+                if(addFee)
+                {
+                    const unitsConsumed = simulate.value.unitsConsumed+300;
+                    const unitsPrice = 20000
+                    realTx.add(
+                        web3.ComputeBudgetProgram.setComputeUnitLimit({ 
+                            units: unitsConsumed 
+                        })
+                    )
+                    realTx.add(
+                        web3.ComputeBudgetProgram.setComputeUnitPrice({ 
+                            microLamports: unitsPrice
+                        })
+                    )
+                }
+    
+    
+                realTx.sign(signer);
+                realTx.partialSign(signer);
+                var finalSign = realTx.serialize()
+                console.log("final Sign",finalSign)
+    
+                ret.push(
+                    {
+                        t:0,
+                        d:Buffer.from(finalSign).toString("base64")
+                    }
                 )
             }
+            
 
-
-            realTx.sign(signer);
-            realTx.partialSign(signer);
-            var finalSign = realTx.serialize()
-            console.log("final Sign",finalSign)
-
-            ret.push(
-                Buffer.from(finalSign).toString("base64")
-            )
         }
         return ret;
         

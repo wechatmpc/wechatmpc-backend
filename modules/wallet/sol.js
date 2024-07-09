@@ -24,30 +24,69 @@ async function signAndSendTxn(kp,tx)
 {
     try{
         const conn = new web3.Connection(sol_rpc_url);
-
-        const rawSign =  new Uint8Array(b58.decode(tx.d))
+        var ret = [];
+        const txs = JSON.parse(
+            tx.d
+        )
+        for(var u = 0 ; u<txs.length ; u++)
+        {
+            const ele = txs[u]
+            const rawSign =  new Uint8Array(b58.decode(ele))
     
-        const realTx =web3.Transaction.populate(web3.Message.from(rawSign))
+            const realTx =web3.Transaction.populate(web3.Message.from(rawSign))
+                
+            let blockhashObj = await conn.getRecentBlockhash();
+            realTx.recentBlockhash = blockhashObj.blockhash;
+    
+            const signer = web3.Keypair.fromSecretKey(b58.decode(kp.solKp.privateKey))
+            console.log(signer.publicKey.toString())
 
-        // realTx.add(
-        //     web3.ComputeBudgetProgram.setComputeUnitLimit({ 
-        //         units: 1000 
-        //       })
-        //   )
-        // realTx.add(
-        //     web3.ComputeBudgetProgram.setComputeUnitPrice({ 
-        //         microLamports: 20000
-        //       })
-        //   )
-        const signer = web3.Keypair.fromSecretKey(b58.decode(kp.solKp.privateKey))
-        console.log(signer.publicKey.toString())
-        realTx.sign(signer);
-        realTx.partialSign(signer);
-        var finalSign = realTx.serialize()
-        console.log("final Sign",finalSign)
-        return Buffer.from(finalSign).toString("base64")
+            const simulate = await conn.simulateTransaction(realTx,[signer],[signer.publicKey])
+            console.log(
+                "🚧 Do conn.simulateTransaction",
+                simulate,
+                simulate.value.accounts
+            )
+            // if(!simulate.value.logs)
+
+            var addFee = true;
+            simulate.value.logs.forEach(ele => {
+                if(ele == 'Program ComputeBudget111111111111111111111111111111 success')
+                {
+                    addFee = false
+                }
+            });
+            if(addFee)
+            {
+                const unitsConsumed = simulate.value.unitsConsumed+300;
+                const unitsPrice = 20000
+                realTx.add(
+                    web3.ComputeBudgetProgram.setComputeUnitLimit({ 
+                        units: unitsConsumed 
+                    })
+                )
+                realTx.add(
+                    web3.ComputeBudgetProgram.setComputeUnitPrice({ 
+                        microLamports: unitsPrice
+                    })
+                )
+            }
+
+
+            realTx.sign(signer);
+            realTx.partialSign(signer);
+            var finalSign = realTx.serialize()
+            console.log("final Sign",finalSign)
+
+            ret.push(
+                Buffer.from(finalSign).toString("base64")
+            )
+        }
+        return ret;
         
-        return await web3.sendAndConfirmTransaction(
+        return await web3.sendAndConfirmTr
+        
+        ansaction(
             conn,
             realTx,
             [signer]

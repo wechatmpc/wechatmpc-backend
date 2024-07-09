@@ -131,11 +131,6 @@ async function setTimeoutTest()
 
 async function test() {
     // await tonTest()
-    console.log(
-        JSON.parse(
-            Buffer.from(b58.decode('2Wzm3Df4WpmRG13y9z1W7savKAGCBnEjdsrSyEC1Wkxu1tzeuSorzZfyQur6QAGTEnpj6')).toString()
-        )
-    )
     // await setTimeoutTest()
     // setTimeout(
     //     async function(){

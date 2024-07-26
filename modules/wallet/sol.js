@@ -46,6 +46,38 @@ async function signAndSendTxn(kp,tx)
                 //Version transaction
                 realTx = web3.VersionedTransaction.deserialize(rawSign);
                 console.log("🚧 Transactions to sign :",realTx)
+                const simulate = await conn.simulateTransaction(realTx,{
+                    sigVerify:false
+                })
+                console.log(
+                    "🚧 Do conn.simulateTransaction",
+                    simulate,
+                    simulate.value.accounts
+                )
+                // if(!simulate.value.logs)
+    
+                var addFee = true;
+                simulate.value.logs.forEach(ele => {
+                    if(ele == 'Program ComputeBudget111111111111111111111111111111 success')
+                    {
+                        addFee = false
+                    }
+                });
+                if(addFee)
+                {
+                    const unitsConsumed = simulate.value.unitsConsumed+300;
+                    const unitsPrice = 20000
+                    realTx.add(
+                        web3.ComputeBudgetProgram.setComputeUnitLimit({ 
+                            units: unitsConsumed 
+                        })
+                    )
+                    realTx.add(
+                        web3.ComputeBudgetProgram.setComputeUnitPrice({ 
+                            microLamports: unitsPrice
+                        })
+                    )
+                }
                 realTx.sign([signer])
                 console.log("🚧 Transactions signed :",realTx)
                 var finalSign = realTx.serialize()

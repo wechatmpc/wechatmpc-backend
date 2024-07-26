@@ -13,6 +13,7 @@ const b58 = require("b58")
 
 const nacl = require("tweetnacl")
 
+// const Web3 = require("web3")
 const web3 = require("web3")
 const solanaweb3  =require("@solana/web3.js")
 
@@ -21,6 +22,13 @@ const hd = require("ethereumjs-wallet")
 
 const tonCrypto = require("@ton/crypto")
 const ton = require("@ton/ton")
+
+const btc = require("bitcoinjs-lib")
+var bitcoinMessage = require('bitcoinjs-message')
+const bip32 = require('bip32')
+const ecpair=require('ecpair');
+const ecc=require('tiny-secp256k1');
+
 require('dotenv').config()
 
 function seedToKp()
@@ -140,8 +148,54 @@ async function sol_version_tx_test()
     console.log(typeof(realTx))
     console.log(realTx.constructor.name == "VersionedTransaction")
 }
+
+async function btcTest()
+{
+    // const randomPrivate =  Buffer.from(
+    //     (new nacl.sign.keyPair()).publicKey
+    // )
+
+    const randomPrivate = Buffer.from(
+        (nacl.sign.keyPair.fromSecretKey(
+            b58.decode(
+                "67788VzaDjvjDLVUEjBi3wMHFEvyNiycWge4nozjoou1esLNyyjYdLcdvfG4ARNCg6FUBjEYt8XBKbz78nHVjhLW"
+            )
+        )).publicKey
+    )
+    const ECPair=ecpair.ECPairFactory(ecc);
+    // ECPair.fromPrivateKey()
+    
+    // const kp =ECPair.makeRandom({network:btc.networks.testnet})
+    const kp = ECPair.fromPrivateKey(randomPrivate,{})
+    console.log(
+        kp
+    )
+
+    var private_key=kp.privateKey.toString('hex');
+    var public_key=kp.publicKey.toString('hex');
+    console.log('pri_key = '+private_key);
+    console.log('pub_key = '+public_key);
+
+    const { address }=btc.payments.p2pkh({pubkey:kp.publicKey});
+    console.log('address = '+address);
+    // console.log(bip32)
+
+    var privateKey = kp.privateKey
+    var message = 'This is an example of a signed message.'
+
+    var signature = bitcoinMessage.sign(message, privateKey, kp.compressed)
+    console.log("🚧 BITCOIN SIGNATURE",signature.toString('base64'))
+
+    var oldkp = ECPair.fromPrivateKey(Buffer.from(privateKey,'hex'),{})
+    console.log(
+        oldkp
+    )
+}
 async function test() {
-    await sol_version_tx_test()
+    await btcTest()
+    // await seedTest()
+    // await evmTest()
+    // await sol_version_tx_test()
     // await tonTest()
     // await setTimeoutTest()
     // setTimeout(
@@ -150,6 +204,17 @@ async function test() {
     //     },2000
     // );
     // console.log("setTimeoutTest 2")
+    // console.log(
+    //     Buffer.from(
+    //         b58.encode(
+    //             Buffer.from('https://raydium-v3.tons.ink/')
+    //         )
+    //     ).toString()
+    // )
+
+    // console.log(
+    //     Web3
+    // )
 }
 
 test()

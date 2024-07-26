@@ -48,7 +48,7 @@ function mainMenuButton( lan) {
         [{
             "text": raw.mainMenu[0],
             web_app: {
-                url: 'https://pack.tons.ink/'
+                url: 'https://app.tonspack.com/wallet'
             }
         } ],
         backAndClose(lan)

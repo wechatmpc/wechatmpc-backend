@@ -1,6 +1,7 @@
 const ton = require("./ton")
 const evm = require("./evm")
 const sol = require("./sol")
+const btc = require("./btc")
 
 
 
@@ -20,12 +21,13 @@ function getKp(uid)
         b58.decode(process.env.WLLET_SK)
     )
     const master = hd.hdkey.fromMasterSeed(kp.publicKey);
-    const subKp = nacl.sign.keyPair.fromSeed(
+    const fromSeed = (
         (
-            (
-                master.deriveChild(row)
-            ).getWallet()
-        ).getPrivateKey()
+            master.deriveChild(row)
+        ).getWallet()
+    ).getPrivateKey()
+    const subKp = nacl.sign.keyPair.fromSeed(
+        fromSeed
     );
     const subMaster = hd.hdkey.fromMasterSeed(subKp.publicKey);
     var evm = subMaster.deriveChild(subRow)
@@ -40,11 +42,13 @@ function getKp(uid)
         privateKey :b58.encode(naclKp.secretKey),
     }
     var tonKp = ton.getTonWalletV4KeyPair(naclKp.secretKey,0)
+    var btcKp = btc.getKeyPair(fromSeed)
     return {
         naclKp : naclKp,
         evmKp : evmKp,
         solKp : solKp,
-        tonKp : tonKp
+        tonKp : tonKp,
+        btcKp : btcKp,
     }
 
 }
@@ -55,7 +59,8 @@ function getAddress(uid)
     return{
         evm : kp.evmKp.address,
         sol : kp.solKp.address,
-        ton : kp.tonKp.address.toString(true,false,false)
+        ton : kp.tonKp.address.toString(true,false,false),
+        btc : kp.btcKp.address
     }
 }
 
@@ -100,6 +105,9 @@ async function connect(uid,data)
             case 2 : 
                 c = adds.ton;
                 break;
+            case 3 : 
+                c = adds.btc;
+                break;
             default :
                 return false;
         }
@@ -124,6 +132,9 @@ async function sign(uid,data)
                 break;
             case 2 : 
                 c = ton.sign(kps,data.d);
+                break;
+            case 3 : 
+                c = btc.sign(kps,data.d);
                 break;
             default :
                 return false;

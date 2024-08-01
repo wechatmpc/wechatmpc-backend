@@ -54,11 +54,12 @@ async function signAndSendTxn(kp,data)
                 const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
                 return receipt;
             }catch(e){
+                console.error(e)
                 return {
                     status:false,
                     reason:e
                 }
-                console.error(e)
+
             }
         }
 

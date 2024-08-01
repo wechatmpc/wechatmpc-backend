@@ -3,7 +3,6 @@ const bip32 = require('bip32')
 const ecpair=require('ecpair');
 const ecc=require('tiny-secp256k1');
 const nacl = require("tweetnacl")
-const b58 = require("b58")
 const bitcoinMessage = require('bitcoinjs-message')
 function getKeyPair(sec)
 {
@@ -29,12 +28,10 @@ function sign(kp,data)
 {
     const message = Buffer.from(data);
     const ECPair=ecpair.ECPairFactory(ecc);
-    const kps = ECPair.fromPrivateKey(Buffer.from(kp.privateKey,'hex'),{})
+    const kps = ECPair.fromPrivateKey(Buffer.from(kp.btcKp.privateKey,'hex'),{})
     var privateKey = kps.privateKey
     var signature = bitcoinMessage.sign(message, privateKey, kps.compressed)
-    console.log("🚧 BITCOIN SIGNATURE",signature.toString('base64'))
-
-    return signature
+    return signature.toString('base64')
 }
 
 async function signAndSendTxn(kp,tx)

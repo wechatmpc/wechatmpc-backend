@@ -59,7 +59,13 @@ function getAddress(uid)
     return{
         evm : kp.evmKp.address,
         sol : kp.solKp.address,
-        ton : kp.tonKp.address.toString(true,false,false),
+        ton : kp.tonKp.address.toString(
+            {
+                urlSafe: true,
+                bounceable: false,
+                testOnly: false
+            }
+        ),
         btc : kp.btcKp.address
     }
 }

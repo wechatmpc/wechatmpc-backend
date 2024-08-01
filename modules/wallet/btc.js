@@ -1,9 +1,11 @@
 const btc = require("bitcoinjs-lib")
+const TESTNET = btc.networks.testnet;
 const bip32 = require('bip32')
 const ecpair=require('ecpair');
 const ecc=require('tiny-secp256k1');
 const nacl = require("tweetnacl")
 const bitcoinMessage = require('bitcoinjs-message')
+const api = require("../../utils/apis")
 function getKeyPair(sec)
 {
     const ECPair=ecpair.ECPairFactory(ecc);
@@ -36,7 +38,6 @@ function sign(kp,data)
 
 async function signAndSendTxn(kp,tx)
 {
-
 }
 
 module.exports = {

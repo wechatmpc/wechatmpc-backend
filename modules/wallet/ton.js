@@ -2,6 +2,7 @@ const tonCrypto = require("@ton/crypto")
 const ton = require("@ton/ton")
 const keyPairFromSecretKey = tonCrypto.keyPairFromSecretKey
 const nacl = require("tweetnacl")
+const TonWeb = require("tonweb");
 require('dotenv').config();
 function getTonWalletV4KeyPair(sec,workchain)
 {
@@ -40,15 +41,26 @@ async function signAndSendTxn(kp,tx)
 
           const txn = JSON.parse(tx.d)
           console.log("🚧tx",txn)
+          
+          const msg = [];
+
+          txn.forEach(e => {
+            msg.push(
+                ton.internal({
+                    value: (Number(e.v)/Math.pow(10,9)).toString(),
+                    to: e.t,
+                    bounce:false,
+                    body: e.d,
+                  })
+            )
+
+          });
           const ret = await contract.sendTransfer({
             seqno,
             secretKey: keyPair.secretKey,
-            messages: [ton.internal({
-              value: txn.v,
-              to: txn.t,
-              body: txn.data,
-            })]
+            messages: msg
           });
+
           console.log("🚧 Ret , ",ret)
           return 1 ;
     }catch(e)

@@ -45,15 +45,16 @@ async function signAndSendTxn(kp,tx)
           const msg = [];
 
           txn.forEach(e => {
-            msg.push(
-                ton.internal({
-                    value: (Number(e.v)/Math.pow(10,9)).toString(),
-                    to: e.t,
-                    bounce:false,
-                    body: e.d,
-                  })
-            )
-
+            try{
+                msg.push(
+                    ton.internal({
+                        value: (Number(e.v)/Math.pow(10,9)).toString(),
+                        to: e.t,
+                        bounce:false,
+                        body: ton.Cell.fromBase64(e.d),
+                      })
+                )
+            }catch(e){}
           });
           const ret = await contract.sendTransfer({
             seqno,

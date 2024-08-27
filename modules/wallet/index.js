@@ -73,6 +73,18 @@ function getAddress(uid)
 /**
  * The action router 
  */
+
+async function mpc_action(data)
+{
+    let ret = data.ret;
+    if(typeof data.ret == "object")
+    {
+        console.log("🚧need JSON.stringify(ret)",typeof data.ret,typeof data.ret == "object" , typeof data.ret != "string" , typeof data.ret != "number" , typeof data.ret != "boolean" ,ret)
+        ret = JSON.stringify(ret)
+    }
+    await redis.setAction(data.i,ret)
+    return data;
+}
 async function action(uid,data)
 {
     //Action routers
@@ -181,6 +193,7 @@ module.exports = {
     getKp,
     getAddress,
     action,
+    mpc_action,
     ton,
     evm,
     sol

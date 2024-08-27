@@ -48,7 +48,7 @@ function mainMenuButton( lan) {
         [{
             "text": raw.mainMenu[0],
             web_app: {
-                url: 'https://app.tonspack.com/wallet'
+                url: 'https://mpc.tonspack.com/jwt/wallet'
             }
         } ],
         backAndClose(lan)

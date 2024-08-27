@@ -90,6 +90,23 @@ app.post('/action', auth.auth, async function(req, res) {
     }
 })
 
+app.post('/mpc/action', async function(req, res) {
+    console.log("🚧 action/mpc : ",req.body)
+    const ret = await modules.wallet.mpc_action(req.body)
+    res.status(200).send({
+        "code": 200,
+        "data": ret
+    })
+    if(ret)
+    {
+        setTimeout(
+            async function(){
+                await redis.delPreconnect(req.body.i)
+            },60000
+        );
+    }
+})
+
 app.get('/result/:actionId',async function(req, res) {
     const ret = await redis.getAction(req.params.actionId)
     res.status(200).send({

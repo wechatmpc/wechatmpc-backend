@@ -17,7 +17,7 @@ async function signAndSendTxn(kp,data)
     if(web3)
         {
             try{
-                const txns =data.d;
+                const txns = JSON.parse(data.d);
                 const gas = web3.utils.toHex(21000);
                 const gasPrice = await web3.eth.getGasPrice();
                 const nonce = await web3.eth.getTransactionCount( kp.evmKp.address);

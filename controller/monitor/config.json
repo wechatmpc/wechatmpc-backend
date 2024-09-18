@@ -1,0 +1,41 @@
+{
+   
+    "evm":
+    {
+        "router":{
+            "address":""
+        },
+        "stablecoin":{
+            "name":"usdt",
+            "address":"0xdac17f958d2ee523a2206206994597c13d831ec7",
+            "price":1
+        },
+        "tokens":
+        [
+            {
+                "name":"eth",
+                "address":"0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+            },
+            {
+                "name":"btc",
+                "address":"0x2260fac5e5542a773aa44fbcfedf7c193bc2c599"
+            },
+            {
+                "name":"ton",
+                "address":"0x582d872a1b094fc48f5de31d3b73f2d9be47def1"
+            },
+            {
+                "name":"arb",
+                "address":"0xB50721BCf8d664c30412Cfbc6cf7a15145234ad1"
+            },
+            {
+                "name":"matic",
+                "address":"0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0"
+            },
+            {
+                "name":"op",
+                "address":"0x2eecb20df51dc76d05afcf1270c73a2ff1035388"
+            }
+        ]
+    }
+}

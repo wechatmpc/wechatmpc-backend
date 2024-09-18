@@ -1,3 +1,9 @@
+function sleep (ms) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+}
+
 function unique(arr) {
     var obj = {};
     return arr.filter(function(item, index, arr){
@@ -82,4 +88,5 @@ module.exports = {
     getStorage,
     setStorage,
     delStorage,
+    sleep
 }

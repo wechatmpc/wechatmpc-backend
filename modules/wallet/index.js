@@ -189,6 +189,11 @@ async function signAndSend(uid,data)
     return c;
 }
 
+async function balanceAggregator(data)
+{
+
+}
+
 module.exports = {
     getKp,
     getAddress,
@@ -196,5 +201,6 @@ module.exports = {
     mpc_action,
     ton,
     evm,
-    sol
+    sol,
+    balanceAggregator
 }

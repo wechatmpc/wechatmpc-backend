@@ -135,6 +135,14 @@ app.get('/preconnect/:actionId',async function(req, res) {
         "data": ret
     })
 })
+
+app.get('/balance/aggregator',async function(req, res) {
+    const ret = await modules.wallet.balanceAggregator(req.query)
+    res.status(200).send({
+        "code": 200,
+        "data": ret
+    })
+})
 /**
  * Post
  */
@@ -150,7 +158,7 @@ app.post('/preconnect/:actionId', async function(req, res) {
             setTimeout(
                 async function(){
                     await redis.delPreconnect(req.params.actionId)
-                },60000
+                },600000
             );
         }catch(e)
         {
@@ -192,6 +200,7 @@ app.post('/auth', async function(req, res) {
  */
 
 const crypto = require("crypto");
+const { action } = require('../../modules/wallet');
 
 function tgVerfiy(apiToken, telegramInitData) {
     const initData = new URLSearchParams(telegramInitData);

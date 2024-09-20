@@ -136,6 +136,19 @@ app.get('/preconnect/:actionId',async function(req, res) {
     })
 })
 
+app.get('/tokenPrice/aggregator',async function(req, res) {
+    const ret = await redis.getStorage("binance_price_oracle")
+    try{
+        res.status(200).send({
+            "code": 200,
+            "data": JSON.parse(ret)
+        })
+    }catch(e)
+    {
+        sendErr(res,"Internal Oracle Error")
+    }
+})
+
 app.get('/balance/aggregator',async function(req, res) {
     const ret = await modules.wallet.balanceAggregator(req.query)
     res.status(200).send({

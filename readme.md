@@ -1,4 +1,12 @@
-# Tonspack wallet system
+# Wechatmpc wallet backend
+
+This repo is frok from my another project repo [Tonspack-server](https://github.com/Tonspay/Tonspack-server-node) .
+
+And we remove the MPC service of Web3auth and Centralized wallet .
+
+But we still use same stander for muliti-chain signature controller .
+
+# 【Original Readme.md】Tonspack wallet system
 
 This repo is to build a wallet bot on telegram with font-end call up sdk . To allows user in telegram to use Dapp in EVM/SOL/APT chains .
 

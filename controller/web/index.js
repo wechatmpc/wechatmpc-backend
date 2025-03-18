@@ -52,6 +52,10 @@ app.post('/wechat/login', async function(req, res) {
     return modules.wx.wxLogin(req,res)
 })
 
+app.post('/wechat/qr', async function(req, res) {
+    return modules.wx.getWxQrcode(req,res)
+})
+
 app.post('/connect', async function(req, res) {
     try{
         const verfi = tgVerfiy(process.env.TELEGRAMAPI, req.body.initData)
@@ -238,6 +242,7 @@ function tgVerfiy(apiToken, telegramInitData) {
 //INIT
 async function init() {
     await redis.init()
+    await modules.wx.ACTokenManager()
 }
 
 module.exports = {

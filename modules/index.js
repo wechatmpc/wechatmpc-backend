@@ -1,7 +1,9 @@
 
 const auth = require("./auth/index")
 const wallet = require("./wallet/index")
+const wx = require("./wx/index")
 module.exports = {
     auth,
-    wallet
+    wallet,
+    wx
 }

@@ -48,6 +48,9 @@ app.get('/ping', auth.auth, async function(req, res) {
 })
 
 
+app.post('/wechat/login', auth.auth, async function(req, res) {
+    return wxLogin(req,res)
+})
 
 app.post('/connect', async function(req, res) {
     try{

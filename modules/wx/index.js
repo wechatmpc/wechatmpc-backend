@@ -20,10 +20,11 @@ function wxLogin(req, res) {
     getOpenId(code)
     .then(async (data) => {
       const { openid } = data
-      console.log(openid)
+    //   console.log(openid)
       res.send(
         {
-            uid:"000"
+            code:200,
+            uid:openid
         }
       )
     })

@@ -242,7 +242,7 @@ function tgVerfiy(apiToken, telegramInitData) {
 //INIT
 async function init() {
     await redis.init()
-    await modules.wx.ACTokenManager()
+    modules.wx.ACTokenManager()
 }
 
 module.exports = {

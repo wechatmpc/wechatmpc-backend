@@ -49,7 +49,7 @@ app.get('/ping',  async function(req, res) {
 
 
 app.post('/wechat/login', async function(req, res) {
-    return wxLogin(req,res)
+    return modules.wx.wxLogin(req,res)
 })
 
 app.post('/connect', async function(req, res) {

@@ -40,15 +40,15 @@ async function sendErr(res, err) {
  */
 
 //Ping
-app.get('/ping', auth.auth, async function(req, res) {
+app.get('/ping',  async function(req, res) {
     res.status(200).send({
         "code": 200,
-        "data": res.locals.auth
+        "data": "pong"
     })
 })
 
 
-app.post('/wechat/login', auth.auth, async function(req, res) {
+app.post('/wechat/login', async function(req, res) {
     return wxLogin(req,res)
 })
 

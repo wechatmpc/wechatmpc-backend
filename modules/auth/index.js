@@ -66,6 +66,25 @@ async function authUserAuthKey(key) {
     return await redis.verfiUserAuthKey(key)
 }
 
+async function login(type,id) {
+    let u = {
+        id:"",
+    }
+    switch(type)
+    {
+        case "wechat":
+            u.id = "wechat_"+id
+            break;
+        case "alipay":
+            u.id = "alipay_"+id
+            break;
+        default :
+            return false
+    }
+    const user = await db.newAccount(data);
+    
+}
+
 module.exports = {
     keygen,
     newAuthKey,
